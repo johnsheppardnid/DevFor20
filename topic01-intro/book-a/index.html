@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css"
+          type="text/css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/railscasts.min.css"
+          rel="stylesheet"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/java.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/kotlin.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style>
+      
+
+body {
+  font-family: "Open Sans", "Helvetica", "Helvetica Neue",  "Arial", sans-serif;
+  font-size:90%;
+  color: black;
+}
+
+p {
+  margin: 0.5em;
+}
+
+pre code {
+  font-family: "Monaco";
+  font-size: 100%;
+}
+
+img {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  margin:10px;
+}
+
+h1, h2, h3 {
+  border-bottom:thin solid black;
+  margin-bottom: 0.5em;
+  margin-top: 1em;
+}
+
+h1 {
+  font-style:italic;
+  font-size:130%;
+}
+
+h2 {
+  font-size:110%;
+}
+
+h3 {
+  font-size:100%;
+}
+
+
+
+      
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.footer {
+  background: white;
+  text-align: right;
+}
+.content {
+  flex: 1;
+  overflow: auto;
+}
+
+
+
+    </style>
+  </head>
+
+  
+  
+
+  <div class="ui fixed top pointing inverted stackable menu labmenu">
+    <header class="header item">
+      <i id="toc" class="sitemap icon"></i>
+      
+        <a href="../index.html">  Mobile Device Forensics  </a>
+      
+    </header>
+    <div class="right tab-menu menu">
+      
+        <a class="item" data-tab="Lab-03-Android-Forensics">
+          Lab-03-Android-Forensics
+        </a>
+      
+        <a class="item" data-tab="01-Overview">
+          01-Overview
+        </a>
+      
+        <a class="item" data-tab="02-Connecting">
+          02-Connecting
+        </a>
+      
+        <a class="item" data-tab="03-Emulator">
+          03-Emulator
+        </a>
+      
+        <a class="item" data-tab="04-ADB">
+          04-ADB
+        </a>
+      
+        <a class="item" data-tab="05-dmesg">
+          05-dmesg
+        </a>
+      
+        <a class="item" data-tab="06-Logcat">
+          06-Logcat
+        </a>
+      
+        <a class="item" data-tab="07-dumpsys">
+          07-dumpsys
+        </a>
+      
+        <a class="item" data-tab="08-Issues">
+          08-Issues
+        </a>
+      
+    </div>
+  </div>
+
+
+  
+
+  <div class="ui pushable">
+    <div class="ui inverted labeled icon left inline vertical sidebar menu">
+      <br><br>
+      
+        
+          
+            <a class="item"
+               href="/topic01-intro/book-a/index.html">Lab-03-Android-Forensics </a>
+          
+        
+      
+    </div>
+    <div class="pusher" tabindex="-1">
+      <div class="ui basic segment">
+        <br>
+        
+          <div class="ui tab segment lab" data-tab="Lab-03-Android-Forensics">
+            <h1>Android Environment Setup</h1>
+<p>Part 1 Android Mobile Devices</p>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="01-Overview">
+            <h1>Android Forensics</h1>
+<p>By the end of this lab you should be able to get an emulated android device running and issue it with the &#39;adb devices&#39; command. Follow the links below to get started.</p>
+<ul>
+<li><p>Setup and run a Nexus 6P with Android Pie (API 28)</p>
+</li>
+<li><p>Boot the emulator</p>
+</li>
+<li><p>Connect to the device using ADB</p>
+</li>
+<li><p>Gather the Kernel logs and decode them</p>
+</li>
+<li><p>Gather the Application logs and decode thm</p>
+</li>
+</ul>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="02-Connecting">
+            <h1>Setting up and Running the Emulator</h1>
+<p>At this point you should have Android Studio installed. Open Android Studio and in the bottom right select configure and then AVD Manager.</p>
+<p><img src="img/Setup0.png" alt=""></p>
+<p>Choose phone as the category, and Nexus 6p as the device.</p>
+<p><img src="img/Setup1.png" alt=""></p>
+<p>Under recommended, select and download Pie as the system image to use.</p>
+<p><img src="img/Setup2.png" alt=""></p>
+<p>When the file has downloaded, launch the device.</p>
+<p><img src="img/Setup3.png" alt=""></p>
+<p>You can leave the default settings as they are.</p>
+<p><img src="img/Setup4.png" alt=""></p>
+<p>You should now see a device on screen like below.</p>
+<p><img src="img/Setup5.png" alt=""></p>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="03-Emulator">
+            <h1>Connecting to the device - ADB</h1>
+<p>Android Debug Bridge, ADB, is a command line tool that allows us to communicate with an Android device. With it we can &quot;push&quot; data to a device, &#39;pull&#39; data from a device and open a shell on a device. It is a part of the SDK Tools.</p>
+<p>You have already downloaded and installed the SDK Tools either in Santoku last week, or if you have downloaded Android Studio to your machine. The Santoku VM also has extra tools you can use for Android encryption, and that you may use for routing a physical device if you so choose in your assignment.</p>
+<p>You can also download the platform tools as a standalone tool set to use on your primary machine if you so wish. It can be downlaoded from <a href="https://developer.android.com/studio/releases/platform-tools">here</a>.</p>
+<h4>Connecting over USB</h4>
+<p>You must enable USB debugging on a device to connect to it. USB debugging is found in the device system settings, under Developer options. On Android 4.2 and higher, the Developer options screen is hidden by default. To make it visible, go to Settings &gt; About phone and tap Build number seven times. Return to the previous screen to find Developer options at the bottom. On some devices, the Developer options screen might be located or named differently.</p>
+<h4>Communicating with the Device</h4>
+<p>When you connect a device or start an emulator, it checks for an ADB server process. If it cannot find one, it will start one. This service will have a TCP port number assicated with it. Running the devices command from the terminal as seen below, will indicate the port number it is running on.</p>
+<p><img src="img/devices.png" alt=""></p>
+<p>Here we can see one device attached on port 5554. This device is attached as an emulator as opposed to a physical device.</p>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="04-ADB">
+            <h1>ADB Commands</h1>
+<p>Below is a list of ADB commands that you can use on your emulator. More information on these commands can be found at the <a href="https://developer.android.com/studio/command-line/adb">Android Developers site</a> and at <a href="http://adbshell.com/">ADB Shell</a>. You should take time to familiarise yourself with these commands. The ADB help command can be found with</p>
+<pre><code>adb --help</code></pre>
+<h4>ADB Debugging</h4>
+<p>adb devices</p>
+<p>adb forward</p>
+<p>adb kill-server</p>
+<h4>Wireless</h4>
+<p>adb connect</p>
+<p>adb usb</p>
+<h4>Package Manager</h4>
+<p>adb install</p>
+<p>adb uninstall</p>
+<p>adb shell pm list packages</p>
+<p>adb shell pm path</p>
+<p>adb shell pm clear</p>
+<h4>File Manager</h4>
+<p>adb pulladb push</p>
+<p>adb shell ls</p>
+<p>adb shell cd</p>
+<p>adb shell rm</p>
+<p>adb shell mkdir</p>
+<p>adb shell touch</p>
+<p>adb shell pwd</p>
+<p>adb shell cp</p>
+<p>adb shell mv</p>
+<h4>Network</h4>
+<p>adb shell netstat</p>
+<p>adb shell ping</p>
+<p>adb shell netcfg</p>
+<p>adb shell ip</p>
+<h4>Logcat</h4>
+<p>adb logcat</p>
+<p>adb shell dumpsys</p>
+<p>adb shell dumpstate</p>
+<h4>Screenshot</h4>
+<p>adb shell screencap</p>
+<p>adb shell screenrecord [4.4+]</p>
+<h4>System</h4>
+<p>adb root</p>
+<p>adb sideload</p>
+<p>adb shell ps</p>
+<p>adb shell top</p>
+<p>adb shell getprop</p>
+<p>adb shell setprop</p>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="05-dmesg">
+            <h1>ADB and dmesg</h1>
+<p>&#39;dmesg&#39; is a linux command that stands for driver message. It&#39;s function is to dump the kernel logs to the screen or to a file from the buffer . The command may need you to acquire root access to the phone. To do this run</p>
+<p><img src="img/ADBroot.png" alt=""></p>
+<p>Next at the command prompt run the command </p>
+<pre><code>adb shell dmesg</code></pre>
+<p>It will return something similar to below. These can also be found at &#39;/dev/kmsg&#39;</p>
+<pre><code>head /dev/kmsg</code></pre>
+<p>Can you make any sense of the dmsg output?</p>
+<p><img src="img/ADBdmesg.png" alt=""></p>
+<p>At the begining of each line is a number in square brackets, this is the kernel running time and will stop while the system is suspended. The timestamp is in the form of </p>
+<pre><code>[seconds . microseconds] &lt;driver type &gt;   &lt;method&gt;   &lt;logged data&gt;</code></pre>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="06-Logcat">
+            <h1>ADB and Logcat</h1>
+<p>Logcat will continuously dump a log of system messages, including stack traces when the device throws an error and messages. Running the command without the &#39;-d&#39; option at the end of the command will result in the command not stopping. You can also write the output to a file with &#39;-f&#39;. For more informatio check <a href="https://developer.android.com/studio/command-line/logcat">here</a>.</p>
+<pre><code>
+adb shell logcat &lt;options&gt; &lt;filters&gt;</code></pre>
+<pre><code>
+adb shell logcat --help</code></pre>
+<p>Some samples to try</p>
+<pre><code>
+adb shell logcat -b radio</code></pre>
+<pre><code>
+adb shell logcat -d -v color</code></pre>
+<pre><code>
+adb shell logcat -d *:W</code></pre>
+<p>Understanding the output (based on the thread issuing the message)</p>
+<pre><code>
+&lt;date&gt; &lt;invocation time&gt; &lt;pid&gt; &lt;tid&gt; &lt;priotiry level&gt; &lt;tag&gt;</code></pre>
+<h2>Options</h2>
+<h3>-b allows you to load specific a buffer or buffers. The buffers available are</h3>
+<ul>
+<li><p>radio: View the buffer that contains radio/telephony related messages.</p>
+</li>
+<li><p>events: View the interpreted binary system event buffer messages.</p>
+</li>
+<li><p>main: View the main log buffer (default) does not contain system and crash log messages.</p>
+</li>
+<li><p>system: View the system log buffer (default).</p>
+</li>
+<li><p>crash: View the crash log buffer (default).</p>
+</li>
+<li><p>all: View all buffers.</p>
+</li>
+<li><p>default: Reports main, system, and crash buffers.</p>
+</li>
+</ul>
+<h3>-e <expr>, --regex=<expr>    Only print lines where the log message matches <expr> where <expr> is a regular expression.</h3>
+<h3>-c, --clear    Clear (flush) the selected buffers and exit. The default buffer set is main, system and crash. To clear all of the buffers, use -b all -c.</h3>
+<h3>-v <format>    Set the output format for log messages. The default is threadtime format. For a list of supported formats</h3>
+<h3>-L, -last    Dump the logs prior to the last reboot.</h3>
+<h3>-S, --statistics    Include statistics in the output to help you identify and target log spammers.</h3>
+<h3>--pid=<pid> ...    Only print logs from the given PID.</h3>
+<h2>Priority Levels</h2>
+<ul>
+<li><p>V: Verbose (lowest priority)</p>
+</li>
+<li><p>D: Debug</p>
+</li>
+<li><p>I: Info</p>
+</li>
+<li><p>W: Warning</p>
+</li>
+<li><p>E: Error</p>
+</li>
+<li><p>F: Fatal</p>
+</li>
+<li><p>S: Silent (highest priority, on which nothing is ever printed)</p>
+</li>
+</ul>
+<h2>Examples of tags include</h2>
+<p>ErrorProcessor:</p>
+<p>DeviceStateChecker:</p>
+<p>AudioRecord:</p>
+<p>GnssLocationProvider:</p>
+<h2>Ouput Formats</h2>
+<ul>
+<li><p>color: Show each priority level with a different color for each priority level.</p>
+</li>
+<li><p>descriptive: Show log buffer event descriptions. This modifier affects event log buffer messages only, and has 
+no effect on the other non-binary buffers. The event descriptions come from the event-log-tags database.</p>
+</li>
+<li><p>epoch: Display time in seconds starting from Jan 1, 1970.</p>
+</li>
+<li><p>monotonic: Display time in CPU seconds starting from the last boot.</p>
+</li>
+<li><p>printable: Ensure that any binary logging content is escaped.</p>
+</li>
+<li><p>uid: If permitted by access controls, display the UID or Android ID of the logged process.</p>
+</li>
+<li><p>usec: Display the time with precision down to microseconds.</p>
+</li>
+<li><p>UTC: Display time as UTC.</p>
+</li>
+<li><p>year: Add the year to the displayed time.</p>
+</li>
+<li><p>zone: Add the local time zone to the displayed time.</p>
+</li>
+<li><p>brief: Display priority, tag, and PID of the process issuing the message.</p>
+</li>
+<li><p>long: Display all metadata fields and separate messages with blank lines.</p>
+</li>
+<li><p>process: Display PID only.</p>
+</li>
+<li><p>raw: Display the raw log message with no other metadata fields.</p>
+</li>
+<li><p>tag: Display the priority and tag only.</p>
+</li>
+<li><p>thread: A legacy format that shows priority, PID, and TID of the thread issuing the message.</p>
+</li>
+<li><p>threadtime (default): Display the date, invocation time, priority, tag, PID, and TID of the thread issuing the message.</p>
+</li>
+<li><p>time: Display the date, invocation time, priority, tag, and PID of the process issuing the message.</p>
+</li>
+</ul>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="07-dumpsys">
+            <h1>dumpsys</h1>
+<p>dumpsys is a tool that runs on Android devices and provides information about system services. For more information check <a href="https://developer.android.com/studio/command-line/dumpsys">here</a>.</p>
+<pre><code>
+adb shell dumpsys</code></pre>
+<p>The output can be very long so needs to be filtered to make sense of it. In this example the output is 63725 lines in length.</p>
+<pre><code>adb shell dumpsys | wc -l
+   63725</code></pre>
+<p>In order to find the system services you can look at type the following </p>
+<pre><code>
+adb shell dumpsys -l</code></pre>
+<p>Some example of what are returened inlcude &#39;account&#39; and &#39;location&#39;. Try typing </p>
+<pre><code>
+adb shell dumpsys location</code></pre>
+<pre><code>
+adb shell dumpsys account</code></pre>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="08-Issues">
+            <h1>Common Situations</h1>
+<p>Incompatible server version eg 39 and 40 - kill the server and reconnect to the device</p>
+<pre><code>adb kill-server
+adb devices</code></pre>
+<p>Insufficient priviliges - run the command </p>
+<pre><code>adb root</code></pre>
+
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+  <br>
+  <script>
+    $(document).on('keydown', function(e) {
+  e = e || window.event;
+  var nextTab;
+  switch (e.which || e.keyCode) {
+    case 37: // left
+      nextTab = $('.tab-menu a[data-tab].active').prev('a[data-tab]');
+      if (!nextTab.length) nextTab = $('.tab-menu a[data-tab]').last();
+      nextTab.click();
+      $('.pusher').focus();
+      break;
+
+    case 39: // right
+      nextTab = $('.tab-menu a[data-tab].active').next('a[data-tab]');
+      if (!nextTab.length) nextTab = $('.tab-menu a[data-tab]').first();
+      nextTab.click();
+      $('.pusher').focus();
+      break;
+  }
+});
+
+    $(document).ready(function() {
+  $('img').addClass('ui image');
+
+  $('.ui.embed').embed();
+
+  const $images = $('.lab img');
+  jQuery.each($images, function(i) {
+    if ($images[i].alt.length > 0) {
+      const divImg = $(document.createElement('div')).addClass(
+        'ui basic segment',
+      );
+      $($images[i]).wrap(divImg);
+      const divLabel = $(document.createElement('div')).addClass(
+        'ui blue ribbon label',
+      );
+      divLabel.append($images[i].alt);
+      $(divLabel).insertBefore($images[i]);
+    }
+  });
+
+  $('.ui.menu .item').tab({
+    history: true,
+    historyType: 'hash',
+  });
+
+  $('.popup').popup();
+
+  $('.ui.sidebar')
+    .sidebar({ context: $('.pushable') })
+    .sidebar('setting', 'transition', 'slide out')
+    .sidebar('attach events', '#toc');
+});
+
+  </script>
+
+
+
+  <div class="ui bottom fixed borderless right menu">
+    <div class="ui right small menu">
+      <div class="ui tiny basic message segment">
+         Powered by <a href="https://github.com/edeleastar/tutors-ts">tutors-ts.</a> 
+      </div>
+    </div>
+  </div>
+
+  </body>
+
+</html>
