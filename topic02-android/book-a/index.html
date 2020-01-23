@@ -123,6 +123,10 @@ html, body {
           04-ADB
         </a>
       
+        <a class="item" data-tab="07-dumpsys">
+          07-dumpsys
+        </a>
+      
         <a class="item" data-tab="08-Issues">
           08-Issues
         </a>
@@ -261,6 +265,31 @@ html, body {
 <p>adb shell top</p>
 <p>adb shell getprop</p>
 <p>adb shell setprop</p>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="07-dumpsys">
+            <h1>dumpsys</h1>
+<p>dumpsys is a tool that runs on Android devices and provides information about system services. For more information check <a href="https://developer.android.com/studio/command-line/dumpsys">here</a>.</p>
+<pre><code>
+adb shell dumpsys</code></pre>
+<p>The output can be very long so needs to be filtered to make sense of it. In this example the output is 63725 lines in length.</p>
+<pre><code>adb shell dumpsys | wc -l
+   63725</code></pre>
+<p>In order to find the system services you can look at type the following </p>
+<pre><code>
+adb shell dumpsys -l</code></pre>
+<p>Some example of what are returened inlcude &#39;account&#39; and &#39;location&#39;. Try typing </p>
+<pre><code>
+adb shell dumpsys location</code></pre>
+<pre><code>
+adb shell dumpsys account</code></pre>
+<p>What can you find out about the battery? What is the capacity of the battery? Is it currently charging?</p>
+<p>There are several options for this that you can see from the battery options returned in the &#39;-l&#39; command.</p>
+<p>Install <a href="https://developer.android.com/topic/performance/power/setup-battery-historian.html">battery historian</a> to visualise the data better.</p>
+<p>What can you find out about the USB?</p>
+<p>What can you find out about the wifi?
+(eg: IP addresses, timestamps etc)</p>
 
           </div>
         
