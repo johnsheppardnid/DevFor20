@@ -123,20 +123,12 @@ html, body {
           04-ADB
         </a>
       
-        <a class="item" data-tab="05-dmesg">
-          05-dmesg
-        </a>
-      
-        <a class="item" data-tab="06-Logcat">
-          06-Logcat
-        </a>
-      
-        <a class="item" data-tab="07-dumpsys">
-          07-dumpsys
-        </a>
-      
         <a class="item" data-tab="08-Issues">
           08-Issues
+        </a>
+      
+        <a class="item" data-tab="09.adb-tasks">
+          09.adb-tasks
         </a>
       
     </div>
@@ -272,146 +264,6 @@ html, body {
 
           </div>
         
-          <div class="ui tab segment lab" data-tab="05-dmesg">
-            <h1>ADB and dmesg</h1>
-<p>&#39;dmesg&#39; is a linux command that stands for driver message. It&#39;s function is to dump the kernel logs to the screen or to a file from the buffer . The command may need you to acquire root access to the phone. To do this run</p>
-<p><img src="img/ADBroot.png" alt=""></p>
-<p>Next at the command prompt run the command </p>
-<pre><code>adb shell dmesg</code></pre>
-<p>It will return something similar to below. These can also be found at &#39;/dev/kmsg&#39;</p>
-<pre><code>head /dev/kmsg</code></pre>
-<p>Can you make any sense of the dmsg output?</p>
-<p><img src="img/ADBdmesg.png" alt=""></p>
-<p>At the begining of each line is a number in square brackets, this is the kernel running time and will stop while the system is suspended. The timestamp is in the form of </p>
-<pre><code>[seconds . microseconds] &lt;driver type &gt;   &lt;method&gt;   &lt;logged data&gt;</code></pre>
-
-          </div>
-        
-          <div class="ui tab segment lab" data-tab="06-Logcat">
-            <h1>ADB and Logcat</h1>
-<p>Logcat will continuously dump a log of system messages, including stack traces when the device throws an error and messages. Running the command without the &#39;-d&#39; option at the end of the command will result in the command not stopping. You can also write the output to a file with &#39;-f&#39;. For more informatio check <a href="https://developer.android.com/studio/command-line/logcat">here</a>.</p>
-<pre><code>
-adb shell logcat &lt;options&gt; &lt;filters&gt;</code></pre>
-<pre><code>
-adb shell logcat --help</code></pre>
-<p>Some samples to try</p>
-<pre><code>
-adb shell logcat -b radio</code></pre>
-<pre><code>
-adb shell logcat -d -v color</code></pre>
-<pre><code>
-adb shell logcat -d *:W</code></pre>
-<p>Understanding the output (based on the thread issuing the message)</p>
-<pre><code>
-&lt;date&gt; &lt;invocation time&gt; &lt;pid&gt; &lt;tid&gt; &lt;priotiry level&gt; &lt;tag&gt;</code></pre>
-<h2>Options</h2>
-<h3>-b allows you to load specific a buffer or buffers. The buffers available are</h3>
-<ul>
-<li><p>radio: View the buffer that contains radio/telephony related messages.</p>
-</li>
-<li><p>events: View the interpreted binary system event buffer messages.</p>
-</li>
-<li><p>main: View the main log buffer (default) does not contain system and crash log messages.</p>
-</li>
-<li><p>system: View the system log buffer (default).</p>
-</li>
-<li><p>crash: View the crash log buffer (default).</p>
-</li>
-<li><p>all: View all buffers.</p>
-</li>
-<li><p>default: Reports main, system, and crash buffers.</p>
-</li>
-</ul>
-<h3>-e <expr>, --regex=<expr>    Only print lines where the log message matches <expr> where <expr> is a regular expression.</h3>
-<h3>-c, --clear    Clear (flush) the selected buffers and exit. The default buffer set is main, system and crash. To clear all of the buffers, use -b all -c.</h3>
-<h3>-v <format>    Set the output format for log messages. The default is threadtime format. For a list of supported formats</h3>
-<h3>-L, -last    Dump the logs prior to the last reboot.</h3>
-<h3>-S, --statistics    Include statistics in the output to help you identify and target log spammers.</h3>
-<h3>--pid=<pid> ...    Only print logs from the given PID.</h3>
-<h2>Priority Levels</h2>
-<ul>
-<li><p>V: Verbose (lowest priority)</p>
-</li>
-<li><p>D: Debug</p>
-</li>
-<li><p>I: Info</p>
-</li>
-<li><p>W: Warning</p>
-</li>
-<li><p>E: Error</p>
-</li>
-<li><p>F: Fatal</p>
-</li>
-<li><p>S: Silent (highest priority, on which nothing is ever printed)</p>
-</li>
-</ul>
-<h2>Examples of tags include</h2>
-<p>ErrorProcessor:</p>
-<p>DeviceStateChecker:</p>
-<p>AudioRecord:</p>
-<p>GnssLocationProvider:</p>
-<h2>Ouput Formats</h2>
-<ul>
-<li><p>color: Show each priority level with a different color for each priority level.</p>
-</li>
-<li><p>descriptive: Show log buffer event descriptions. This modifier affects event log buffer messages only, and has 
-no effect on the other non-binary buffers. The event descriptions come from the event-log-tags database.</p>
-</li>
-<li><p>epoch: Display time in seconds starting from Jan 1, 1970.</p>
-</li>
-<li><p>monotonic: Display time in CPU seconds starting from the last boot.</p>
-</li>
-<li><p>printable: Ensure that any binary logging content is escaped.</p>
-</li>
-<li><p>uid: If permitted by access controls, display the UID or Android ID of the logged process.</p>
-</li>
-<li><p>usec: Display the time with precision down to microseconds.</p>
-</li>
-<li><p>UTC: Display time as UTC.</p>
-</li>
-<li><p>year: Add the year to the displayed time.</p>
-</li>
-<li><p>zone: Add the local time zone to the displayed time.</p>
-</li>
-<li><p>brief: Display priority, tag, and PID of the process issuing the message.</p>
-</li>
-<li><p>long: Display all metadata fields and separate messages with blank lines.</p>
-</li>
-<li><p>process: Display PID only.</p>
-</li>
-<li><p>raw: Display the raw log message with no other metadata fields.</p>
-</li>
-<li><p>tag: Display the priority and tag only.</p>
-</li>
-<li><p>thread: A legacy format that shows priority, PID, and TID of the thread issuing the message.</p>
-</li>
-<li><p>threadtime (default): Display the date, invocation time, priority, tag, PID, and TID of the thread issuing the message.</p>
-</li>
-<li><p>time: Display the date, invocation time, priority, tag, and PID of the process issuing the message.</p>
-</li>
-</ul>
-
-          </div>
-        
-          <div class="ui tab segment lab" data-tab="07-dumpsys">
-            <h1>dumpsys</h1>
-<p>dumpsys is a tool that runs on Android devices and provides information about system services. For more information check <a href="https://developer.android.com/studio/command-line/dumpsys">here</a>.</p>
-<pre><code>
-adb shell dumpsys</code></pre>
-<p>The output can be very long so needs to be filtered to make sense of it. In this example the output is 63725 lines in length.</p>
-<pre><code>adb shell dumpsys | wc -l
-   63725</code></pre>
-<p>In order to find the system services you can look at type the following </p>
-<pre><code>
-adb shell dumpsys -l</code></pre>
-<p>Some example of what are returened inlcude &#39;account&#39; and &#39;location&#39;. Try typing </p>
-<pre><code>
-adb shell dumpsys location</code></pre>
-<pre><code>
-adb shell dumpsys account</code></pre>
-
-          </div>
-        
           <div class="ui tab segment lab" data-tab="08-Issues">
             <h1>Common Situations</h1>
 <p>Incompatible server version eg 39 and 40 - kill the server and reconnect to the device</p>
@@ -419,6 +271,168 @@ adb shell dumpsys account</code></pre>
 adb devices</code></pre>
 <p>Insufficient priviliges - run the command </p>
 <pre><code>adb root</code></pre>
+
+          </div>
+        
+          <div class="ui tab segment lab" data-tab="09.adb-tasks">
+            <h1>Basic Device Investigation Using ADB</h1>
+<p>Use these tasks to familiarise yourself with the Android ADB.</p>
+<ol>
+<li><p>What device are you connected to?</p>
+</li>
+<li><p>How do you open a shell on the phone?</p>
+</li>
+<li><p>What Unix Commands are available on the phone?</p>
+</li>
+<li><p>What features are available on the phone?</p>
+</li>
+<li><p>What packages are installed on the phone?</p>
+</li>
+<li><p>What system packages are installed on the phone?</p>
+</li>
+<li><p>Where is the Chrome package located on the phone?</p>
+</li>
+<li><p>What third party packages are installed on the phone?</p>
+</li>
+<li><p>What permission are available to third pary apps on the phone?</p>
+</li>
+<li><p>Insatll an app on the phone</p>
+</li>
+<li><p>Delete the app from the phone</p>
+</li>
+<li><p>Delete any remaining information after the app has been deleted</p>
+</li>
+<li><p>What users are on the system?</p>
+</li>
+<li><p>Add a user to the phone</p>
+</li>
+<li><p>Delete the user</p>
+</li>
+<li><p>How many users can the device support?</p>
+</li>
+<li><p>Take a screenhot of the phone</p>
+</li>
+</ol>
+<!--
+What device are you connected to?
+
+~~~
+adb devices
+~~~
+
+
+How do you open a shell on the phone?
+
+~~~
+adb shell
+~~~
+
+
+What Unix Commands are available on the phone?
+
+~~~
+ls /system/bin
+~~~
+
+What features are available on the phone?
+
+~~~
+pm list features
+~~~
+
+
+What packages are installed on the phone?
+
+~~~
+pm list packages
+~~~
+
+
+What system packages are installed on the phone?
+
+~~~
+pm list packages -s 
+~~~
+
+
+Where is the Chrome package located on the phone?
+
+~~~
+pm path chrome
+~~~
+
+
+What third party packages are installed on the phone?
+
+~~~
+pm list packages -3
+~~~
+
+
+
+What permission are available to third pary apps on the phone?
+
+~~~
+pm list permission-groups
+
+pm list permissions -s     
+~~~
+
+
+Insatll an app on the phone
+
+~~~
+adb install path_to_apk
+~~~
+
+Delete the app from the phone
+
+~~~
+uninstall package
+~~~
+
+Delete any remaining information after the app has been deleted
+
+~~~
+clear package
+~~~
+
+What users are on the system?
+
+~~~
+list users
+~~~
+
+Add a user to the phone
+
+~~~
+create-user user_name
+~~~
+
+Delete the user
+
+~~~
+remove-user user_id
+~~~
+
+How many users can the device support?
+
+~~~
+get-max-users
+~~~
+
+Take a screenhot of the phone
+
+~~~
+adb shell screencap /sdcard/screen.png
+adb shell
+screencap /sdcard/screen.png
+exit
+$ adb pull /sdcard/screen.png
+~~~
+
+-->
+
 
           </div>
         
